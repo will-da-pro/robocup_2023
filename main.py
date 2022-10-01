@@ -1,61 +1,27 @@
-from __future__ import print_function
-import cv2 as cv
+import cv2
 import numpy as np
-import argparse
-import random as rng
-myHarris_window = 'My Harris corner detector'
-myShiTomasi_window = 'My Shi Tomasi corner detector'
-myHarris_qualityLevel = 100
-myShiTomasi_qualityLevel = 100
-max_qualityLevel = 100
-rng.seed(12345)
-def myHarris_function(val):
-    myHarris_copy = np.copy(src)
-    myHarris_qualityLevel = max(val, 1)
-    for i in range(src_gray.shape[0]):
-        for j in range(src_gray.shape[1]):
-            if Mc[i,j] > myHarris_minVal + ( myHarris_maxVal - myHarris_minVal )*myHarris_qualityLevel/max_qualityLevel:
-                cv.circle(myHarris_copy, (j,i), 4, (rng.randint(0,256), rng.randint(0,256), rng.randint(0,256)), cv.FILLED)
-    cv.imshow(myHarris_window, myHarris_copy)
-def myShiTomasi_function(val):
-    myShiTomasi_copy = np.copy(src)
-    myShiTomasi_qualityLevel = max(val, 1)
-    for i in range(src_gray.shape[0]):
-        for j in range(src_gray.shape[1]):
-            if myShiTomasi_dst[i,j] > myShiTomasi_minVal + ( myShiTomasi_maxVal - myShiTomasi_minVal )*myShiTomasi_qualityLevel/max_qualityLevel:
-                cv.circle(myShiTomasi_copy, (j,i), 4, (rng.randint(0,256), rng.randint(0,256), rng.randint(0,256)), cv.FILLED)
-    cv.imshow(myShiTomasi_window, myShiTomasi_copy)
-# Load source image and convert it to gray
-parser = argparse.ArgumentParser(description='Code for Creating your own corner detector tutorial.')
-parser.add_argument('--input', help='Path to input image.', default='./tiles/JPEG/11. Gridlock.jpg')
-args = parser.parse_args()
-src = cv.imread(cv.samples.findFile(args.input))
-if src is None:
-    print('Could not open or find the image:', args.input)
-    exit(0)
-src_gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
-# Set some parameters
-blockSize = 3
-apertureSize = 3
-# My Harris matrix -- Using cornerEigenValsAndVecs
-myHarris_dst = cv.cornerEigenValsAndVecs(src_gray, blockSize, apertureSize)
-# calculate Mc
-Mc = np.empty(src_gray.shape, dtype=np.float32)
-for i in range(src_gray.shape[0]):
-    for j in range(src_gray.shape[1]):
-        lambda_1 = myHarris_dst[i,j,0]
-        lambda_2 = myHarris_dst[i,j,1]
-        Mc[i,j] = lambda_1*lambda_2 - 0.04*pow( ( lambda_1 + lambda_2 ), 2 )
-myHarris_minVal, myHarris_maxVal, _, _ = cv.minMaxLoc(Mc)
-# Create Window and Trackbar
-cv.namedWindow(myHarris_window)
-cv.createTrackbar('Quality Level:', myHarris_window, myHarris_qualityLevel, max_qualityLevel, myHarris_function)
-myHarris_function(myHarris_qualityLevel)
-# My Shi-Tomasi -- Using cornerMinEigenVal
-myShiTomasi_dst = cv.cornerMinEigenVal(src_gray, blockSize, apertureSize)
-myShiTomasi_minVal, myShiTomasi_maxVal, _, _ = cv.minMaxLoc(myShiTomasi_dst)
-# Create Window and Trackbar
-cv.namedWindow(myShiTomasi_window)
-cv.createTrackbar('Quality Level:', myShiTomasi_window, myShiTomasi_qualityLevel, max_qualityLevel, myShiTomasi_function)
-myShiTomasi_function(myShiTomasi_qualityLevel)
-cv.waitKey()
+
+#img = cv2.imread('./tiles/JPEG/7. Dead End.jpg', cv2.IMREAD_UNCHANGED)
+img = cv2.imread('./tiles/JPEG/1. Straight.jpg', cv2.IMREAD_UNCHANGED)
+#img = np.full((1000,1000,3), 12, np.uint8)
+#convert img to grey
+#if img
+try:    
+    img_grey = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+except:
+    print("error")
+    img_grey = cv2.cvtColor(img, cv2.COLOR_GRAY)
+#set a thresh
+thresh = 1500
+#get threshold image
+ret,thresh_img = cv2.threshold(img_grey, thresh, 255, cv2.THRESH_BINARY)
+contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+#create an empty image for contours
+img_contours = np.zeros(img.shape)
+# draw the contours on the empty image
+cv2.drawContours(img_contours, contours, -1, (0,255,0), 3)
+#save image
+cv2.imshow('Contours',img_contours) 
+cv2.imshow('Grey', img_grey)
+cv2.waitKey()
