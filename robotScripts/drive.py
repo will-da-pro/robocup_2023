@@ -4,8 +4,8 @@ from time import sleep
 class driveBase():
     def __init__(self, port1: int, port2: int, port3: int, port4, int) -> None:
         gpiozero.setmode(gpiozero.BOARD)
-        self.lMotor = gpiozero.Motor(port1, port3)
-        self.rMotor = gpiozero.Motor(port2, port4)
+        self.lMotor = gpiozero.Motor(port1, port3, pwm=True)
+        self.rMotor = gpiozero.Motor(port2, port4, pwm=True)
 
     def drive(self, speed: int, turnSpeed: float=0) -> None:
         """
