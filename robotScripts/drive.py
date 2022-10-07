@@ -1,17 +1,17 @@
 import gpiozero
 
 class driveBase():
-    def __init__(self, port1, port2, port3, port4) -> None:
+    def __init__(self, port1: int, port2: int, port3: int, port4: int) -> None:
         gpiozero.setmode(gpiozero.BOARD)
         self.lForwards = gpiozero.PWMOutputDevice(port1)
         self.rForwards = gpiozero.PWMOutputDevice(port2)
         self.lBackwards = gpiozero.PWMOutputDevice(port3)
         self.rBackwards = gpiozero.PWMOutputDevice(port4)
-    def drive(self, speed, turnSpeed):
+    def drive(self, speed, turnSpeed) -> None:
         self.stop()
 
-        lSpeed = (abs(speed) + turnSpeed) / 100
-        rSpeed = (abs(speed) - turnSpeed) / 100
+        lSpeed = (abs(speed) + turnSpeed) / 1000
+        rSpeed = (abs(speed) - turnSpeed) / 1000
 
         if lSpeed > 1:
             lSpeed = 1
@@ -30,7 +30,7 @@ class driveBase():
 
             self.lBackwards.on()
             self.rBackwards.on()
-    def stop(self):
+    def stop(self) -> None:
         self.lForwards.off()
         self.rForwards.off()
         self.lBackwards.off()
