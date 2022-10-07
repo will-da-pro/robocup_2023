@@ -8,6 +8,6 @@ cv2.imshow("Straight", img)
 print("Window Shown")
 cv2.waitKey()
 
-robot = robotScripts.drive.driveBase(1, 2, 3, 4)
+robot = robotScripts.drive.driveBase(1, 0)
 
-robot.drive(10, 2)
+robot.drive(10)

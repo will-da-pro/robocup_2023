@@ -1,15 +1,22 @@
 import gpiozero
+from time import sleep
 
 class driveBase():
-    def __init__(self, port1: int, port2: int, port3: int, port4: int) -> None:
+    def __init__(self, port1: int, port2: int) -> None:
         gpiozero.setmode(gpiozero.BOARD)
-        self.lForwards = gpiozero.PWMOutputDevice(port1)
-        self.rForwards = gpiozero.PWMOutputDevice(port2)
-        self.lBackwards = gpiozero.PWMOutputDevice(port3)
-        self.rBackwards = gpiozero.PWMOutputDevice(port4)
-    def drive(self, speed, turnSpeed) -> None:
-        self.stop()
+        self.lMotor = gpiozero.PWMOutputDevice(port1, True, 0)
+        self.rMotor = gpiozero.PWMOutputDevice(port2, True, 0)
 
+    def drive(self, speed: int, turnSpeed: float=0) -> None:
+        """
+        Makes the robot drive
+
+        :param int speed:
+          Controls the speed at which to drive at. choose a number between -1000 and 1000.
+
+        :param float turnSpeed:
+          A number that controls the speed at which to turn. negative is left, positive is right. Default value is zero.
+        """
         lSpeed = (abs(speed) + turnSpeed) / 1000
         rSpeed = (abs(speed) - turnSpeed) / 1000
 
@@ -18,20 +25,25 @@ class driveBase():
         if rSpeed > 1:
             rSpeed = 1
 
-        if speed >= 0:
-            self.lForwards.value = lSpeed
-            self.rForwards.value = rSpeed
+        self.lMotor.value = lSpeed
+        self.rMotor.value = rSpeed
 
-            self.lForwards.on()
-            self.rForwards.on()
-        else:
-            self.lBackwards.value = lSpeed
-            self.rBackwards.value = rSpeed
+        self.lMotor.on()
+        self.rMotor.on()
 
-            self.lBackwards.on()
-            self.rBackwards.on()
     def stop(self) -> None:
-        self.lForwards.off()
-        self.rForwards.off()
-        self.lBackwards.off()
-        self.rBackwards.off()
+        self.lMotor.off()
+        self.rMotor.off()
+
+    def straight(self, distance: float, speed: int) -> None:
+        self.stop()
+
+        self.lMotor.value = speed / 1000
+        self.rMotor.value = speed / 1000
+
+        self.lMotor.on()
+        self.rMotor.on()
+
+        sleep(distance)
+
+        self.stop()
