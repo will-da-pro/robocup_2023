@@ -2,10 +2,10 @@ import gpiozero
 from time import sleep
 
 class driveBase():
-    def __init__(self, port1: int, port2: int) -> None:
+    def __init__(self, port1: int, port2: int, port3: int, port4, int) -> None:
         gpiozero.setmode(gpiozero.BOARD)
-        self.lMotor = gpiozero.PWMOutputDevice(port1, True, 0)
-        self.rMotor = gpiozero.PWMOutputDevice(port2, True, 0)
+        self.lMotor = gpiozero.Motor(port1, port3)
+        self.rMotor = gpiozero.Motor(port2, port4)
 
     def drive(self, speed: int, turnSpeed: float=0) -> None:
         """
@@ -17,33 +17,33 @@ class driveBase():
         :param float turnSpeed:
           A number that controls the speed at which to turn. negative is left, positive is right. Default value is zero.
         """
-        
-        lSpeed = (abs(speed) + turnSpeed) / 1000
-        rSpeed = (abs(speed) - turnSpeed) / 1000
+
+        lSpeed = (speed + turnSpeed) / 1000
+        rSpeed = (speed - turnSpeed) / 1000
 
         if lSpeed > 1:
             lSpeed = 1
         if rSpeed > 1:
             rSpeed = 1
 
-        self.lMotor.value = lSpeed
-        self.rMotor.value = rSpeed
-
-        self.lMotor.on()
-        self.rMotor.on()
+        if lSpeed >= 0:
+            self.lMotor.forward(lSpeed)
+        else:
+            self.lMotor.backward(abs(lSpeed))
+        if rSpeed >= 0:
+            self.rMotor.forward(rSpeed)
+        else:
+            self.rMotor.backward(abs(rSpeed))
 
     def stop(self) -> None:
-        self.lMotor.off()
-        self.rMotor.off()
+        self.lMotor.stop()
+        self.rMotor.stop()
 
     def straight(self, distance: float, speed: int) -> None:
         self.stop()
 
-        self.lMotor.value = speed / 1000
-        self.rMotor.value = speed / 1000
-
-        self.lMotor.on()
-        self.rMotor.on()
+        self.lMotor.forward(speed / 1000)
+        self.rMotor.forward(speed / 1000)
 
         sleep(distance)
 
