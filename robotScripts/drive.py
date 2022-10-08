@@ -1,12 +1,30 @@
 import gpiozero
-from time import sleep
+from time import process_time
 
 class driveBase():
-    def __init__(self, port1: int, port2: int, port3: int, port4) -> None:
+    def __init__(self, port1: int, port2: int, port3: int, port4: int, defaultSpeed=500) -> None:
+        """
+        A class for all your robot driving needs. Use these functions for any movement.
+
+        :param int port1:
+        The GPIO pin to use for forward input in the left motor.
+
+        :param int port2:
+        The GPIO pin to use for forward input in the right motor.
+
+        :param int port3:
+        The GPIO pin to use for backward input in the left motor.
+
+        :param int port4:
+        The GPIO pin to use for backward input in the right motor.
+        """
+
         self.lMotor = gpiozero.Motor(port1, port3, pwm=True)
         self.rMotor = gpiozero.Motor(port2, port4, pwm=True)
 
-    def drive(self, speed: int, turnSpeed: float=0) -> None:
+        self.defaultSpeed = defaultSpeed
+
+    def drive(self, speed: int = None, turnSpeed: float = 0) -> None:
         """
         Makes the robot drive
 
@@ -16,6 +34,9 @@ class driveBase():
         :param float turnSpeed:
           A number that controls the speed at which to turn. negative is left, positive is right. Default value is zero.
         """
+
+        if speed == None:
+            speed = self.defaultSpeed
 
         lSpeed = (speed + turnSpeed) / 1000
         rSpeed = (speed - turnSpeed) / 1000
@@ -35,15 +56,30 @@ class driveBase():
             self.rMotor.backward(abs(rSpeed))
 
     def stop(self) -> None:
+        """
+        Stop driving instantly.
+        """
+
         self.lMotor.stop()
         self.rMotor.stop()
 
     def straight(self, distance: float, speed: int) -> None:
+        """
+        Drives straight for a period of time.
+
+        :param float distance:
+        The amount of time that the robot drives for.
+
+        :param int speed:
+        The speed at which to drive at.
+        """
+
         self.stop()
 
-        self.lMotor.forward(speed / 1000)
-        self.rMotor.forward(speed / 1000)
+        self.straight(speed)
 
-        sleep(distance)
+        timeToStop = process_time + distance
+        while process_time < timeToStop:
+            pass
 
         self.stop()
