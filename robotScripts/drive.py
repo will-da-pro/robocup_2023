@@ -26,7 +26,7 @@ class driveBase():
 
     def drive(self, speed: int = None, turnSpeed: float = 0) -> None:
         """
-        Makes the robot drive
+        Makes the robot drive. What did you think this did?
 
         :param int speed:
           Controls the speed at which to drive at. choose a number between -1000 and 1000.
@@ -57,7 +57,7 @@ class driveBase():
 
     def stop(self) -> None:
         """
-        Stop driving instantly.
+        Stops driving immediately.
         """
 
         self.lMotor.stop()
