@@ -14,11 +14,11 @@ GPIO.setup(led,GPIO.OUT)
 
 #Turn on the LED
 print ("LED on")
-GPIO.output(led,1)
+GPIO.output(led,HIGH)
 
 #Wait 5s
 time.sleep(5)
 
 #Turn off the LED
 print ("LED off")
-GPIO.output(led,0)
+GPIO.output(led,LOW)
