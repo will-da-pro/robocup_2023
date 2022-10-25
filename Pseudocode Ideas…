@@ -1,0 +1,2 @@
+for line follow - find both the angle and the position of the line, then average it to get the final turn speed. (this might need some adusting)
+for line follow - to find the postition of the line - use multiple points of interest on the y axis and average them. (ill add a photo)
