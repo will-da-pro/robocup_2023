@@ -1,9 +1,20 @@
 import cv2
 import numpy as np
+lastError = 0
 cap = cv2.VideoCapture (0)
 while True:
 	ret,frame = cap.read()
 	frame = cv2. resize frame, (256, 192))
+	calcError()
+	calcPID()
+	#cv2.imshow("Masked", line) 
+	cv2.imshow ("Live", frame)
+	if cv2.waitKey(1) & Oxff == ord("s"):
+		break
+cap.release()
+cv2. destroyAllWindows()
+
+def calcError():
 	#roi = frame 100:158, 0:255]
 	lowBlack = np.uint8([30,30,30])
 	highBlack = np.uint8([0,0,0])
@@ -14,7 +25,7 @@ while True:
 	#add erode and dilate
 	contours,_ = cv2. findContours (line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	if len (contours) > 0:
-		largestContour = max(contours, key=v2.contourArea)
+		largestContour = max(contours, key=cv2.contourArea)
 		x,y,w,h = cv2.boundingRect (largestContour)
 		cv2. rectangle(frame, (x,y), (x+w, y+h) , (0,255,0),2)
 		m = cv2.moments (largestContour)
@@ -24,10 +35,18 @@ while True:
 		print (error)
 	else:
 		print ("no line")
-	cv2.imshow("Masked", line) cv2.imshow ("Live", frame)
-	if cv2.waitKey(1) & Oxff == ord("s"):
-		break
-cap.release()
-cv2. destroyAllWindows()
 
-return error
+def calcPID():
+	pastErrors = error+lastError
+	
+	pMult = 1
+	iMult = 1
+	dMult = 1
+	
+	pFix = error*pMult
+	integral = lastError+pastErrors
+	iFix = integral*iMult
+	derivative = error-lastError
+	dFix = derivative*dMult
+	
+	error = lastError
