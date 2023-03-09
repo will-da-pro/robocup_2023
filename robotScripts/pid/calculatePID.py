@@ -24,7 +24,7 @@ class PID:
         self.lastError = self.error
         self.error = 0
         
-        return error
+        return self.error
 
     def calculateIntegral(self) -> float:
         integral = self.errorSum * self.multiplier
