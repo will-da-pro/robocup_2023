@@ -7,3 +7,5 @@ class LineFollower:
     
     def follow(self, img):
         pass
+
+
