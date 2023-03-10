@@ -2,7 +2,7 @@ import cv2
 import numpy
 import picamera
 
-class PID:
+class PIDCalculator:
     def __init__(self, multiplier, camera):
         self.multiplier = multiplier
         self.camera = camera
