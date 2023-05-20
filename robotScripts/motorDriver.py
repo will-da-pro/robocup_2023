@@ -1,8 +1,7 @@
 import RPi.GPIO as GPIO
 
 class Motors:
-    def __init__(self, direction, speedL, speedR):
-        self.direction = direction
+    def __init__(self, speedL, speedR):
         self.speedL = speedL
         self.speedR = speedR
 
@@ -38,23 +37,25 @@ class Motors:
     def moveLeft(self):
         GPIO.PWM(en1,1000).ChangeDutyCycle(self.speedL) #sets speed - self.speed must be 0-100
 
-        if self.direction == 1: #turns the motor forward
+        if self.speedL > 0: #turns the motor forward
             GPIO.output(in1,GPIO.HIGH)
             GPIO.output(in2,GPIO.LOW)
-        elif self.direction == 2: #turns the motor backward
+        elif self.direction < 0: #turns the motor backward
             GPIO.output(in1,GPIO.LOW)
             GPIO.output(in2,GPIO.HIGH)
         else:
-            print("ERROR moveLeft: First argument (Direction) takes '1'-Forward OR '2'-Backward")
+            GPIO.output(in1,GPIO.LOW)
+            GPIO.output(in2,GPIO.LOW)
 
     def moveRight(self):
         GPIO.PWM(en2,1000).ChangeDutyCycle(self.speedR) 
 
-        if self.direction == 1:
+        if self.speedR > 0:
             GPIO.output(in3,GPIO.HIGH)
             GPIO.output(in4,GPIO.LOW)
-        elif self.direction == 2:
+        elif self.direction < 0:
             GPIO.output(in3,GPIO.LOW)
             GPIO.output(in4,GPIO.HIGH)
         else:
-            print("ERROR moveLeft: First argument (Direction) takes either '1'-Forward OR '2'-Backward")
+            GPIO.output(in3,GPIO.LOW)
+            GPIO.output(in4,GPIO.LOW)
