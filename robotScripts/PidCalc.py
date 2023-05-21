@@ -20,5 +20,3 @@ class PID:
 	
         turnRate = (pFix+iFix+dFix)/3
         turnRate = round(turnRate,0)
-        
-PID(100,1,1,1).calcTurnRate() #test

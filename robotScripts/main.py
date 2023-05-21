@@ -12,8 +12,8 @@ while True:
 
     #pid calc
     PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
+    pastErrors = error + lastError
     lastError = error
-    pastErrors = error + PID.lastError
 
     #motor output
     Motors(500, PID.turnRate).moveLeftMotor()
