@@ -10,8 +10,6 @@ class PID:
 
     
     def calcTurnRate(self):
-        self.pastErrors = self.error+self.lastError
-	
         pFix = self.error*self.pMult
 	
         integral = self.lastError+self.pastErrors
@@ -22,9 +20,5 @@ class PID:
 	
         turnRate = (pFix+iFix+dFix)/3
         turnRate = round(turnRate,0)
-        print("PID = "+str(turnRate))
-
-        self.lastError = self.error
         
-
 PID(100,1,1,1).calcTurnRate() #test

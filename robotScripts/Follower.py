@@ -35,8 +35,6 @@ class LineFollower:
                 print("error = "+str(error))
                 cv2.circle(frame,(x,y),5,(0,0,255),-1)
             cv2.imshow('img', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
 
 
 if __name__ == '__main__':

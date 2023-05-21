@@ -31,8 +31,8 @@ class Motors:
         GPIO.output(in3,GPIO.LOW)
         GPIO.output(in4,GPIO.LOW)
 
-        GPIO.PWM(en1,1000)
-        GPIO.PWM(en2,1000)
+        #GPIO.PWM(en1,1000)
+        #GPIO.PWM(en2,1000)
 
     def moveLeft(self):
         GPIO.PWM(en1,1000).ChangeDutyCycle(self.speedL) #sets speed - self.speed must be 0-100
