@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from motorDriver import Motors
 class LineFollower:
     def __init__(self):
         pass
@@ -10,7 +10,17 @@ class LineFollower:
         while True:
             ret, frame = cap.read()
             global error
-            #roi = frame[100:158,0:255]
+            
+            roi = frame[100:158,0:255]
+            green = cv2.inRange(roi, (0,65,0), (100,200,100))
+
+            if len(green) > 0:
+                greenContours,_ = cv2. findContours(line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+                largestGreenContour = max(greenContours,key=cv2.contourArea)
+                greenDetected = True
+                x,y,w,h = cv2.boundingRect(largestGreenContour)
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
+
             lowBlack = np.uint8([30,30,30])#adjust
             highBlack = np.uint8([0,0,0])
             line = cv2.inRange(frame,highBlack,lowBlack)
@@ -22,19 +32,28 @@ class LineFollower:
             
             if len(contours) == 0:
                 print("no line")
-            
-            largestContour = max(contours,key=cv2.contourArea)
-            x,y,w,h = cv2.boundingRect(largestContour)
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
-            m = cv2.moments(largestContour)
-            
+            else:
+                largestContour = max(contours,key=cv2.contourArea)
+                x,y,w,h = cv2.boundingRect(largestContour)
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
+                m = cv2.moments(largestContour)
+
             if m['m00'] > 1:
                 x = int(m['m10']/m['m00'])
                 y = int(m['m01']/m['m00'])
                 error = x-(frameWidth/2)
                 print("error = "+str(error))
                 cv2.circle(frame,(x,y),5,(0,0,255),-1)
+            
+            if greenDetected == True:
+                if error > 0:
+                    Motors.greenRight()
+                elif error < 0:
+                    Motors.greenLeft()
+            
             cv2.imshow('img', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
 
 if __name__ == '__main__':

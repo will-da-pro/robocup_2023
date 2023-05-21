@@ -35,7 +35,7 @@ class Motors:
         #GPIO.PWM(en1,1000)
         #GPIO.PWM(en2,1000)
 
-    def moveLeft(self):
+    def moveLeftMotor(self):
         speedL = (self.speed + self.turnAngle) / 100
 
         GPIO.PWM(en1,1000).ChangeDutyCycle(speedL)
@@ -50,7 +50,7 @@ class Motors:
             GPIO.output(in1,GPIO.LOW)
             GPIO.output(in2,GPIO.LOW)
 
-    def moveRight(self):
+    def moveRightMotor(self):
         speedR = (self.speed - self.turnAngle) / 100
 
         GPIO.PWM(en2,1000).ChangeDutyCycle(speedR)
@@ -98,3 +98,11 @@ class Motors:
         GPIO.output(in2,GPIO.LOW)
         GPIO.output(in3,GPIO.LOW)
         GPIO.output(in4,GPIO.LOW)
+
+    def greenLeft():
+        Motors(500,-50).moveLeftMotor()
+        Motors(500,-50).moveRightMotor()
+
+    def greenRight():
+        Motors(500,50).moveRightMotor()
+        Motors(500,50).moveLeftMotor()
