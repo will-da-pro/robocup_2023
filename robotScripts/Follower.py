@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from motorDriver import Motors
+
 class LineFollower:
     def __init__(self):
         pass
@@ -46,6 +47,7 @@ class LineFollower:
                 cv2.circle(frame,(x,y),5,(0,0,255),-1)
             
             if greenDetected == True:
+                Motors.stop()
                 if error > 0:
                     Motors.greenRight()
                 elif error < 0:
