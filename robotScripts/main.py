@@ -7,17 +7,16 @@ pastErrors = 0
 
 while True:
     #error calc
-    LineFollower.follow()
-    error = LineFollower.error
+    error = LineFollower().follow().error
 
     #pid calc
-    PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
+    turn = PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
     pastErrors = error + lastError
     lastError = error
 
     #motor output
-    Motors(500, PID.turnRate).moveLeftMotor()
-    Motors(500, PID.turnRate).moveRightMotor()
+    Motors(500, turn.turnRate).moveLeftMotor()
+    Motors(500, turn.turnRate).moveRightMotor()
 
     #water tower
 
