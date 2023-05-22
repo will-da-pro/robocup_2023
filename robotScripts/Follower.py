@@ -16,8 +16,6 @@ class LineFollower:
             green = cv2.inRange(frame,(0,80,0),(70,255,60))
             greenContours,_ = cv2.findContours(green, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-            highBlack = np.uint8([30,30,30])#adjust
-            lowBlack = np.uint8([0,0,0])
             line = cv2.inRange(frame,(0,0,0),(40,40,40))
     
             #line = cv2.GaussianBlur (line, (5,5),0)
