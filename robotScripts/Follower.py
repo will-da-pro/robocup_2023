@@ -1,59 +1,64 @@
 import cv2
 import numpy as np
-from motorDriver import Motors
+#from motorDriver import Motors
 
 class LineFollower:
     def __init__(self):
         pass
     
     def follow(self, cap: cv2.VideoCapture) -> None:
-        frameWidth = 256
+        frameWidth = 1080
         while True:
             ret, frame = cap.read()
             global error
             
-            roi = frame[100:158,0:255]
-            green = cv2.inRange(roi, (0,65,0), (100,200,100))
+            #roi = frame[100:158,0:255]
+            green = cv2.inRange(frame,(0,80,0),(70,255,60))
+            greenContours,_ = cv2.findContours(green, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-            if len(green) > 0:
-                greenContours,_ = cv2. findContours(line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-                largestGreenContour = max(greenContours,key=cv2.contourArea)
-                greenDetected = True
-                x,y,w,h = cv2.boundingRect(largestGreenContour)
-                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
-
-            lowBlack = np.uint8([30,30,30])#adjust
-            highBlack = np.uint8([0,0,0])
-            line = cv2.inRange(frame,highBlack,lowBlack)
+            highBlack = np.uint8([30,30,30])#adjust
+            lowBlack = np.uint8([0,0,0])
+            line = cv2.inRange(frame,(0,0,0),(40,40,40))
     
             #line = cv2.GaussianBlur (line, (5,5),0)
             #add erode and dilate
+
+            if len(greenContours) > 0:
+                largestGreenContour = max(greenContours,key=cv2.contourArea)
+                x,y,w,h = cv2.boundingRect(largestGreenContour)
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
+                greenDetected = True
+            else:
+                greenDetected = False
     
-            contours,_ = cv2. findContours(line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+            lineContours,_ = cv2.findContours(line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
             
-            if len(contours) == 0:
+            if len(lineContours) == 0:
                 print("no line")
             else:
-                largestContour = max(contours,key=cv2.contourArea)
+                largestContour = max(lineContours,key=cv2.contourArea)
                 x,y,w,h = cv2.boundingRect(largestContour)
-                cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),5)
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),5)
                 m = cv2.moments(largestContour)
 
             if m['m00'] > 1:
                 x = int(m['m10']/m['m00'])
                 y = int(m['m01']/m['m00'])
                 error = x-(frameWidth/2)
+                error -= 99
                 print("error = "+str(error))
                 cv2.circle(frame,(x,y),5,(0,0,255),-1)
             
             if greenDetected == True:
-                Motors.stop()
+                #Motors.stop()
                 if error > 0:
-                    Motors.greenRight()
+                    print("greenRight")
+                    #Motors.greenRight()
                 elif error < 0:
-                    Motors.greenLeft()
+                    print("greenLeft")
+                    #Motors.greenLeft()
             
-            cv2.imshow('img', frame)
+            cv2.imshow('a frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
