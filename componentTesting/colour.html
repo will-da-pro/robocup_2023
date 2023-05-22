@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Random Color Generator</title>
+    <style>
+      body {
+        background-color: #f5f5f5;
+      }
+      .color-box {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="color-box"></div>
+    <script>
+      function getRandomColor() {
+        var r = Math.floor(Math.random() * (70 - 0 + 1)) + 0;
+        var g = Math.floor(Math.random() * (255 - 80 + 1)) + 80;
+        var b = Math.floor(Math.random() * (60 - 0 + 1)) + 0;
+        return "rgb(" + r + "," + g + "," + b + ")";
+      }
+
+      var colorBox = document.querySelector(".color-box");
+      colorBox.style.backgroundColor = getRandomColor();
+    </script>
+  </body>
+</html>
