@@ -44,11 +44,11 @@ class driveBase():
         rSpeed = 0
         
         if turnAngle < 0:
-            rSpeed = -turnAngle * speed
-            lSpeed = (100 + turnAngle) * speed
+            rSpeed = -turnAngle * speed / 100
+            lSpeed = (100 + turnAngle) * speed / 100
         else:
-            rSpeed = (100 - turnAngle) * speed
-            lSpeed = turnAngle * speed
+            rSpeed = (100 - turnAngle) * speed / 100
+            lSpeed = turnAngle * speed / 100
             
         self.lMotor.forward(lSpeed)
         self.rMotor.forward(rSpeed)
