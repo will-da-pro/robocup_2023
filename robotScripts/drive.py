@@ -2,7 +2,7 @@ import gpiozero
 from time import process_time
 
 class driveBase():
-    def __init__(self, port1: int, port2: int, port3: int, port4: int, defaultSpeed=500) -> None:
+    def __init__(self, port1: int, port2: int, port3: int, port4: int, defaultSpeed=100) -> None:
         """
         A class for all your robot driving needs. Use these functions for any movement.
 
@@ -22,39 +22,38 @@ class driveBase():
         self.lMotor = gpiozero.Motor(port1, port3, pwm=True)
         self.rMotor = gpiozero.Motor(port2, port4, pwm=True)
 
-        self.defaultSpeed = defaultSpeed
+        self.defaultSpeed = max(0, min(defaultSpeed, 100))
 
-    def drive(self, speed: int = None, turnSpeed: float = 0) -> None:
+    def drive(self, speed: int = None, turnAngle: int = 0) -> None:
         """
         Makes the robot drive. What did you think this did?
 
         :param int speed:
           Controls the speed at which to drive at. choose a number between -1000 and 1000.
 
-        :param float turnSpeed:
+        :param int turnAngle:
           A number that controls the speed at which to turn. negative is left, positive is right. Default value is zero.
         """
 
         if speed == None:
             speed = self.defaultSpeed
-
-        lSpeed = (speed + turnSpeed) / 1000
-        rSpeed = (speed - turnSpeed) / 1000
-
-        if lSpeed > 1:
-            lSpeed = 1
-        if rSpeed > 1:
-            rSpeed = 1
-
-        if lSpeed >= 0:
-            self.lMotor.forward(lSpeed)
+            
+        turnAngle = max(-100, min(turnAngle, 100))
+        
+        lSpeed = 0
+        rSpeed = 0
+        
+        if turnAngle < 0:
+            rSpeed = -turnAngle * speed / 100
+            lSpeed = (100 + turnAngle) * speed / 100
         else:
-            self.lMotor.backward(abs(lSpeed))
-        if rSpeed >= 0:
-            self.rMotor.forward(rSpeed)
-        else:
-            self.rMotor.backward(abs(rSpeed))
-
+            rSpeed = (100 - turnAngle) * speed / 100
+            lSpeed = turnAngle * speed / 100
+            
+        self.lMotor.forward(lSpeed)
+        self.rMotor.forward(rSpeed)
+        
+        
     def stop(self) -> None:
         """
         Stops driving immediately.
@@ -76,7 +75,8 @@ class driveBase():
 
         self.stop()
 
-        self.straight(speed)
+        self.lMotor.forward(speed)
+        self.rMotor.forward(speed)
 
         timeToStop = process_time + distance
         while process_time < timeToStop:
