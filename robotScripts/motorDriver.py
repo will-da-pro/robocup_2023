@@ -2,9 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 class Motors:
-    def __init__(self, speed, turnAngle):
-        self.speed = speed
-        self.turnAngle = turnAngle
+    def __init__(self):
 
         global in1 
         global in2
@@ -32,14 +30,21 @@ class Motors:
         GPIO.output(in3,GPIO.LOW)
         GPIO.output(in4,GPIO.LOW)
 
-        #GPIO.PWM(en1,1000)
-        #GPIO.PWM(en2,1000)
+        self.leftPWM = GPIO.PWM(en1,1000)
+        self.rightPWM = GPIO.PWM(en2,1000)
+        self.leftPWM.start(0)
+        self.rightPWM.start(0)
 
-    def moveLeftMotor(self):
+    def drive(self, speed, turnAngle):
+        speed = int(speed)
+        turnAngle = int(turnAngle)
+
         speedL = (self.speed + self.turnAngle) / 100
+        speedR = (self.speed - self.turnAngle) / 100
 
-        GPIO.PWM(en1,1000).ChangeDutyCycle(speedL)
-        
+        self.leftPWM.ChangeDutyCycle(speedL)
+        self.leftPWM.ChangeDutyCycle(speedR)
+
         if speedL > 0: #right/backward
             GPIO.output(in1,GPIO.HIGH)
             GPIO.output(in2,GPIO.LOW)
@@ -49,11 +54,6 @@ class Motors:
         else:
             GPIO.output(in1,GPIO.LOW)
             GPIO.output(in2,GPIO.LOW)
-
-    def moveRightMotor(self):
-        speedR = (self.speed - self.turnAngle) / 100
-
-        GPIO.PWM(en2,1000).ChangeDutyCycle(speedR)
 
         if speedR > 0: #right/forward
             GPIO.output(in3,GPIO.HIGH)
