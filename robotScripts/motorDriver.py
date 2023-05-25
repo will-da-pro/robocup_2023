@@ -48,11 +48,11 @@ class Motors:
         self.leftPWM.ChangeDutyCycle(speedR)
 
         if speedL > 0: #right/backward
-            GPIO.output(in1,GPIO.HIGH)
-            GPIO.output(in2,GPIO.LOW)
-        elif speedL < 0: #left/forward
             GPIO.output(in1,GPIO.LOW)
             GPIO.output(in2,GPIO.HIGH)
+        elif speedL < 0: #left/forward
+            GPIO.output(in1,GPIO.HIGH)
+            GPIO.output(in2,GPIO.LOW)
         else:
             GPIO.output(in1,GPIO.LOW)
             GPIO.output(in2,GPIO.LOW)
