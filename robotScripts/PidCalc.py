@@ -20,3 +20,4 @@ class PID:
 	
         turnRate = (pFix+iFix+dFix)/3
         turnRate = round(turnRate,0)
+        return turnRate
