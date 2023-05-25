@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from time import sleep
 #from motorDriver import Motors
 
 class LineFollower:
@@ -55,7 +56,7 @@ class LineFollower:
             elif error < 0:
                 print("greenLeft")
                 #Motors.greenLeft()
-            
+        sleep(1)
         cv2.imshow('a frame', frame)
             
         return error

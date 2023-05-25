@@ -11,6 +11,7 @@ while True:
     follower = LineFollower()
     error = follower.follow(cv2.VideoCapture(0))
     #pid calc
+    print(error)
     turn = PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
     pastErrors = error + lastError
     lastError = error
@@ -18,7 +19,7 @@ while True:
     #motor output
     #Motors(500, turn.turnRate).moveLeftMotor()
     #Motors(500, turn.turnRate).moveRightMotor()
-    print(turn)
+    print(turn.turnRate)
     #water tower
 
     #rescue
