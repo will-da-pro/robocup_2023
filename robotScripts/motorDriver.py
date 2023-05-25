@@ -11,13 +11,13 @@ class Motors:
         global en1
         global en2
 
-        in1 = 24 #GPIO pin number
-        in2 = 23
-        in3 = 26
-        in4 = 27
+        in1 = 25 #GPIO pin number
+        in2 = 24
+        in3 = 23
+        in4 = 18
 
-        en1 = 25 #the enable pin left
-        en2 = 28 #the enable pin right
+        en1 = 12 #the enable pin left
+        en2 = 16 #the enable pin right
 
         GPIO.setmode(GPIO.BCM)   #sets pins to outputs
         GPIO.setup(in1,GPIO.OUT)
@@ -39,8 +39,8 @@ class Motors:
         speed = int(speed)
         turnAngle = int(turnAngle)
 
-        speedL = (self.speed + self.turnAngle) / 100
-        speedR = (self.speed - self.turnAngle) / 100
+        speedL = (speed + turnAngle) / 100
+        speedR = (speed - turnAngle) / 100
 
         self.leftPWM.ChangeDutyCycle(speedL)
         self.leftPWM.ChangeDutyCycle(speedR)
