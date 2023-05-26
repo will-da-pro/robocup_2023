@@ -6,10 +6,9 @@ class LineFollower:
     def __init__(self):
         pass
     
-    def follow(self, cap: cv2.VideoCapture) -> None:
+    def follow(self, frame) -> None:
         frameWidth = 1080
         
-        ret, frame = cap.read()
         self.error = 0
             
         #roi = frame[100:158,0:255]
@@ -54,9 +53,8 @@ class LineFollower:
                 #Motors.greenRight()
             elif error < 0:
                 print("greenLeft")
-                #Motors.greenLeft()
+                # Motors.greenLeft()
             
-        cv2.imshow('a frame', frame)
             
         return error
 

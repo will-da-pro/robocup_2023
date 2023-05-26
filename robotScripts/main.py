@@ -8,17 +8,24 @@ pastErrors = 0
 
 while True:
     #error calc
+    cap = cv2.VideoCapture(0)
+    ret, frame = cap.read()
+    
     follower = LineFollower()
-    error = follower.follow(cv2.VideoCapture(0))
-    #pid calc
-    turn = PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
-    pastErrors = error + lastError
-    lastError = error
+    if ret:
+        cv2.imshow('a frame', frame)
+        error = follower.follow(frame)
+        #pid calc
+        turn = PID(error,1,1,1,lastError,pastErrors).calcTurnRate() #change 1's to multipliers
+        pastErrors = error + lastError
+        lastError = error
 
-    #motor output
-    #Motors(500, turn.turnRate).moveLeftMotor()
-    #Motors(500, turn.turnRate).moveRightMotor()
-    print(turn)
-    #water tower
+        #motor output
+        #Motors(500, turn.turnRate).moveLeftMotor()
+        #Motors(500, turn.turnRate).moveRightMotor()
+        print(turn)
+        #water tower
 
-    #rescue
+        #rescue
+    else:
+        break
