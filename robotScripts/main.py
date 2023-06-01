@@ -20,12 +20,10 @@ while True:
         pastErrors = error + lastError
         lastError = error
 
-        #motor output
-        #Motors(500, turn.turnRate).moveLeftMotor()
-        #Motors(500, turn.turnRate).moveRightMotor()
-        print(turn)
-        #water tower
+    #motor output
+    #Motors(500, turn.turnRate).moveLeftMotor()
+    #Motors(500, turn.turnRate).moveRightMotor()
+    print(turn)
+    #water tower
 
-        #rescue
-    else:
-        break
+    #rescue
