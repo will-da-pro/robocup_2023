@@ -3,7 +3,8 @@ from time import sleep
 
 class Motors:
     def __init__(self):
-
+        GPIO.setwarnings(False)
+        
         global in1 
         global in2
         global in3
@@ -14,7 +15,7 @@ class Motors:
         in1 = 25 #GPIO pin number
         in2 = 24
         in3 = 23
-        in4 = 18
+        in4 = 4
 
         en1 = 12 #the enable pin left
         en2 = 16 #the enable pin right
@@ -32,8 +33,8 @@ class Motors:
         GPIO.output(in3,GPIO.LOW)
         GPIO.output(in4,GPIO.LOW)
 
-        self.leftPWM = GPIO.PWM(en1,1000)
-        self.rightPWM = GPIO.PWM(en2,1000)
+        self.leftPWM = GPIO.PWM(en1,50)
+        self.rightPWM = GPIO.PWM(en2,50)
         self.leftPWM.start(0)
         self.rightPWM.start(0)
 
@@ -41,11 +42,14 @@ class Motors:
         speed = int(speed)
         turnAngle = int(turnAngle)
 
-        speedL = (speed + turnAngle) / 100
-        speedR = (speed - turnAngle) / 100
+        speedL = (speed + turnAngle) / 2
+        speedR = (speed - turnAngle) / 2
+        
+        absSpeedL = abs(speedL)
+        absSpeedR = abs(speedR)
 
-        self.leftPWM.ChangeDutyCycle(speedL)
-        self.leftPWM.ChangeDutyCycle(speedR)
+        self.leftPWM.ChangeDutyCycle(absSpeedL)
+        self.rightPWM.ChangeDutyCycle(absSpeedR)
 
         if speedL > 0: #right/backward
             GPIO.output(in1,GPIO.LOW)
@@ -66,7 +70,7 @@ class Motors:
         else: #stop
             GPIO.output(in3,GPIO.LOW)
             GPIO.output(in4,GPIO.LOW)
-
+        sleep(1)
     def forward(self, time, speed):
         GPIO.PWM(en1,1000).ChangeDutyCycle(speed)
         GPIO.PWM(en2,1000).ChangeDutyCycle(speed)
