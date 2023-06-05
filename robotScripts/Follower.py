@@ -8,7 +8,7 @@ class LineFollower:
         pass
     
     def follow(self, frame) -> None:
-        frameWidth = 1080
+        frameWidth = 1358
         
         self.error = 0
             
@@ -46,6 +46,8 @@ class LineFollower:
             error -= 99
             print("error = "+str(error))
             cv2.circle(frame,(x,y),5,(0,0,255),-1)
+        else:
+            error = 0
             
         if greenDetected == True:
             #Motors.stop()
