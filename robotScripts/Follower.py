@@ -42,7 +42,7 @@ class LineFollower:
         if m['m00'] > 1:
             x = int(m['m10']/m['m00'])
             y = int(m['m01']/m['m00'])
-            error = x-(frameWidth/2)
+            error = (x-(frameWidth/2))/679*100
             error -= 99
             print("error = "+str(error))
             cv2.circle(frame,(x,y),5,(0,0,255),-1)
