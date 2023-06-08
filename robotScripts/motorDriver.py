@@ -33,11 +33,14 @@ class Motors:
         speed = int(speed)
         turnAngle = int(turnAngle)
 
-        speedL = (speed + turnAngle) / 100
-        speedR = (speed - turnAngle) / 100
+        speedL = (speed + turnAngle) / 2
+        speedR = (speed - turnAngle) / 2
+        
+        absSpeedL = abs(speedL)
+        absSpeedR = abs(speedR)
 
-        self.leftPWM.ChangeDutyCycle(speedL)
-        self.rightPWM.ChangeDutyCycle(speedR)
+        self.leftPWM.ChangeDutyCycle(absSpeedL)
+        self.rightPWM.ChangeDutyCycle(absSpeedR)
 
         if speedL > 0: #right/backward
             GPIO.output(self.in1,GPIO.LOW)
@@ -58,7 +61,7 @@ class Motors:
         else: #stop
             GPIO.output(self.in3,GPIO.LOW)
             GPIO.output(self.in4,GPIO.LOW)
-
+        sleep(1)
     def forward(self, time, speed):
         GPIO.PWM(self.en1,1000).ChangeDutyCycle(speed)
         GPIO.PWM(self.en2,1000).ChangeDutyCycle(speed)
