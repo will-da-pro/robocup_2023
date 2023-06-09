@@ -61,7 +61,7 @@ class Motors:
         else: #stop
             GPIO.output(self.in3,GPIO.LOW)
             GPIO.output(self.in4,GPIO.LOW)
-        sleep(1)
+            
     def forward(self, time, speed):
         GPIO.PWM(self.en1,1000).ChangeDutyCycle(speed)
         GPIO.PWM(self.en2,1000).ChangeDutyCycle(speed)

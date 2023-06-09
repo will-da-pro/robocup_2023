@@ -77,8 +77,6 @@ class LineFollower:
 
 if __name__ == '__main__':
     follower = LineFollower()
-    stopwatch_start()
     cap = cv2.VideoCapture(0)
-    time = stopwatch_stop()
-    print(f"Execution time: {time:.2f} seconds")
     follower.follow(cap)
+    cv2.imshow(frame)
