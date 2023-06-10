@@ -36,8 +36,8 @@ class Motors:
         speedL = (speed + turnAngle) / 2
         speedR = (speed - turnAngle) / 2
         
-        absSpeedL = abs(speedL)
-        absSpeedR = abs(speedR)
+        absSpeedR = abs(speedL)
+        absSpeedL = abs(speedR)
 
         self.leftPWM.ChangeDutyCycle(absSpeedL)
         self.rightPWM.ChangeDutyCycle(absSpeedR)
