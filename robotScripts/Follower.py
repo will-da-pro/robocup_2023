@@ -3,17 +3,6 @@ import numpy as np
 from time import sleep
 #from motorDriver import Motors
 import warnings
-import time
-
-start_time = [None]
-
-def stopwatch_start():
-    start_time[0] = time.time()
-
-def stopwatch_stop():
-    execution_time = time.time() - start_time[0]
-    start_time[0] = None
-    return execution_time
 
 warnings.filterwarnings("ignore")
 
@@ -22,13 +11,10 @@ class LineFollower:
         pass
     
     def follow(self, cap: cv2.VideoCapture) -> None:
-        ###
         frameWidth = 1358
         
         ret, frame = cap.read()
         self.error = 0
-
-        ###0.22 seconds
 
         #roi = frame[100:158,0:255]
         green = cv2.inRange(frame,(0,80,0),(70,255,60))
@@ -72,7 +58,7 @@ class LineFollower:
             elif error < 0:
                 print("greenLeft")
                 # Motors.greenLeft()
-            
+
         return error
 
 if __name__ == '__main__':
