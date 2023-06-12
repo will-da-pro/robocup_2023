@@ -18,6 +18,6 @@ class PID:
         derivative = self.error-self.lastError
         dFix = derivative*self.dMult
 	
-        turnRate = (pFix+iFix+dFix)/3
+        turnRate = pFix+iFix+dFix
         turnRate = round(turnRate,0)
         return turnRate
