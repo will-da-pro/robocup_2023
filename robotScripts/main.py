@@ -15,8 +15,6 @@ while True:
     #pid calc
     pid = PID(error,2,0.05,0.2,lastError,pastErrors)#change 1's to multipliers
     turnRate = pid.calcTurnRate() 
-    pastErrors = error + lastError
-    lastError = error
     print(turnRate)
     #motor output
     motorsInit.drive(100,turnRate)
