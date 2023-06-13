@@ -17,7 +17,7 @@ while True:
     turnRate = pid.calcTurnRate() 
     print(turnRate)
     #motor output
-    motorsInit.drive(100,turnRate)
+    motorsInit.drive(75,turnRate)
     #water tower
 
     #rescue
