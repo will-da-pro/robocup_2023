@@ -49,47 +49,8 @@ class LineFollower:
             print("error = "+str(error))
             cv2.circle(roi,(xPos,yPos),5,(0,0,255),-1)
 
-
-
-            endBlackLine = (y+h)
-            topRoi = self.frame[0:100,0:frameWidth]
-            bottomRoi = self.frame[endBlackLine-100:endBlackLine,0:frameWidth]
-            lineTop = cv2.inRange(topRoi,(0,0,0),(60,60,60))
-            lineBottom = cv2.inRange(bottomRoi,(0,0,0),(60,60,60))
-            lineTopContours,_ = cv2.findContours(lineTop, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            lineBottomContours,_ = cv2.findContours(lineBottom, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            largestContourTop = max(lineTopContours,key=cv2.contourArea)
-            largestContourBottom = max(lineBottomContours,key=cv2.contourArea)
-            m = cv2.moments(largestContourTop)
-            if m['m00'] > 1:
-                xPosTop = int(m['m10']/m['m00'])
-                yPosTop = int(m['m01']/m['m00'])
-                cv2.circle(topRoi,(xPosTop,yPosTop),5,(0,0,255),-1)
-                topError = (xPosTop-(frameWidth/2))/679*100
-
-            m = cv2.moments(largestContourBottom)
-            if m['m00'] > 1:
-                xPosBottom = int(m['m10']/m['m00'])
-                yPosBottom = int(m['m01']/m['m00'])
-                cv2.circle(bottomRoi,(xPosBottom,yPosBottom),5,(0,0,255),-1)
-                bottomError = (xPosBottom-(frameWidth/2))/679*100
             
 
-            if topError > bottomError:
-                topPointOne = (x+w,y)
-                topPointTwo = (x,y-h)
-                cv2.line(topPointOne,topPointTwo,(100,0,100),5)
-            elif topError < bottomError:
-                bottomPointOne = (x,y)
-                bottomPointTwo = (x+w,y-h)
-                cv2.line(bottomPointOne,bottomPointTwo,(100,0,100),5)
-            delta_x = bottomPointOne - topPointOne
-            delta_y = bottomPointTwo - topPointTwo
-            angle_rad = math.atan2(delta_y, delta_x)
-            angle_deg = math.degrees(angle_rad)
-            print(angle_deg)
-        else:
-            error = 0
 
         if greenDetected == True:
             #Motors.stop()
