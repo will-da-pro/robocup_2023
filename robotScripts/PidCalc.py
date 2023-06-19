@@ -18,7 +18,7 @@ class PID:
         derivative = self.error-self.lastError
         dFix = derivative*self.dMult
 	
-        turnRate = pFix+iFix+dFix #CHANGE ON PI 
+        turnRate = pFix+iFix+dFix
         self.pastErrors = integral
         self.lastError = self.error
         

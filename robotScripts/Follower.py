@@ -15,9 +15,10 @@ class LineFollower:
         frameWidth = 1358
         
         ret, self.frame = cap.read()
+        cv2.resize(self.frame,(679,453))
         error = 0
 
-        roi = self.frame[400:500,0:frameWidth]
+        roi = self.frame[500:600,0:frameWidth]
         green = cv2.inRange(roi,(0,80,0),(70,255,60))
         greenContours,_ = cv2.findContours(green, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -41,7 +42,7 @@ class LineFollower:
                 xPos = int(m['m10']/m['m00'])
                 yPos = int(m['m01']/m['m00'])
                 error = (xPos-(frameWidth/2))/679*100
-                cv2.circle(roi,(xPos,yPos),5,(0,0,255),-1)
+                cv2.circle(roi,(xPos,yPos),5,(255,0,0),-1)
 
                 cv2.circle(self.frame,(679,906),5,(0,255,0),-1)
                 cv2.line(self.frame,(679,906),(xPos,yPos),(0,255,0),2)
@@ -50,9 +51,12 @@ class LineFollower:
                 angleRad = math.tan(opposite/adjacent)
                 angle = angleRad*(180/3.14159)
                 print("angle = ",angle)
+            else:
+                angle = 0
 
         else:
             error = 0
+            angle = 0
 
 
         if greenDetected == True:
@@ -63,7 +67,7 @@ class LineFollower:
                 print("greenLeft")
                 # Motors.greenLeft()
         print("error = ",error)
-        return error
+        return angle 
 
 if __name__ == '__main__':
     follower = LineFollower()
