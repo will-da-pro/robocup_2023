@@ -22,9 +22,10 @@ class LineFollower:
         green = cv2.inRange(roi,(0,80,0),(70,255,60))
         greenContours,_ = cv2.findContours(green, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-        line = cv2.inRange(roi,(0,0,0),(60,60,60))
-        #line = cv2.GaussianBlur (line, (5,5),0)
+        self.line = cv2.inRange(self.frame,(0,0,0),(20,20,20))
         #add erode and dilate
+        self.line = cv2.erode(self.line,None,iterations=2)
+        self.line = cv2.dilate(self.line,None,iterations=2)
 
         if len(greenContours) > 0:
             largestGreenContour = max(greenContours,key=cv2.contourArea)
@@ -34,7 +35,7 @@ class LineFollower:
         else:
             greenDetected = False
     
-        lineContours,_ = cv2.findContours(line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         if len(lineContours) > 0:
             largestContour = max(lineContours,key=cv2.contourArea)
             m = cv2.moments(largestContour)

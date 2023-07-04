@@ -12,8 +12,9 @@ while True:
     follower = LineFollower()
     angle = follower.follow(cap)
     cv2.imshow("frame", follower.frame)
+    cv2.imshow("mask", follower.line)
     #pid calc
-    pid = PID(angle,2,0.05,0.2,lastError,pastErrors)
+    pid = PID(angle,3,0,0,lastError,pastErrors)
     turnRate = pid.calcTurnRate() 
     #print(turnRate)
     #motor output
