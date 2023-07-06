@@ -35,7 +35,17 @@ class Motors:
 
         speedL = (speed + turnAngle) / 2
         speedR = (speed - turnAngle) / 2
-        
+
+        if speedL > 100:
+            speedL = 100
+        elif speedL < -100:
+            speedL = -100
+            
+        if speedR > 100:
+            speedR = 100
+        elif speedR < -100:
+            speedR = -100
+
         absSpeedR = abs(speedL)
         absSpeedL = abs(speedR)
 
