@@ -20,8 +20,8 @@ while True:
     #print(turnRate)
     #motor output
     #motorsInit.drive(75,turnRate)
-    #water tower
 
+    #water tower
     #rescue
     if cv2.waitKey(1) & 0xff == ord("s"):
         break

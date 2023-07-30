@@ -43,10 +43,8 @@ class LineFollower:
                 angle = 0
 
         else:
-            error = 0
             angle = 0
 
-        #print("error = ",error)
         return angle 
 
 if __name__ == '__main__':
