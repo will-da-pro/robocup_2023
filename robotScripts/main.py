@@ -1,5 +1,5 @@
 #from Follower import LineFollower
-from FollowerV2 import LineFollower
+from Follower import LineFollower
 #from motorDriver import Motors
 from PidCalc import PID
 import cv2
@@ -11,13 +11,12 @@ cap = cv2.VideoCapture(0)
 while True:
     #error calc
     follower = LineFollower()
-    error,angle = follower.follow(cap)
+    angle = follower.follow(cap)
     cv2.imshow("frame", follower.frame)
     cv2.imshow("mask", follower.line)
     #pid calc
     #pid = PID(angle,3,0,0,lastError,pastErrors)
     #turnRate = pid.calcTurnRate() 
-    turnRate = (error+angle)/2
     #print(turnRate)
     #motor output
     #motorsInit.drive(75,turnRate)

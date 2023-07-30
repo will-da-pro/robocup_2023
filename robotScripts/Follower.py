@@ -5,8 +5,6 @@ from time import sleep
 import warnings
 import math
 
-warnings.filterwarnings("ignore")
-
 class LineFollower:
     def __init__(self):
         pass
@@ -23,6 +21,7 @@ class LineFollower:
         self.line = cv2.inRange(self.frame,(0,0,0),(20,20,20))
         self.line = cv2.erode(self.line,None,iterations=2)
         self.line = cv2.dilate(self.line,None,iterations=2)
+        #CHANGE NONE
     
         lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         if len(lineContours) > 0:
@@ -37,7 +36,7 @@ class LineFollower:
                 cv2.line(self.frame,(679,906),(xPos,yPos),(0,255,0),2)
                 opposite = xPos-679
                 adjacent = 906-yPos
-                angleRad = math.tan(opposite/adjacent)
+                angleRad = math.atan2(opposite, adjacent)
                 angle = angleRad*(180/3.14159)
                 print("angle = ",angle)
             else:
@@ -47,7 +46,7 @@ class LineFollower:
             error = 0
             angle = 0
 
-        print("error = ",error)
+        #print("error = ",error)
         return angle 
 
 if __name__ == '__main__':
