@@ -23,10 +23,10 @@ class LineFollower:
         self.line = cv2.dilate(self.line,None,iterations=2)
         #CHANGE NONE
     
-        lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        if len(lineContours) > 0:
-            largestContour = max(lineContours,key=cv2.contourArea)
-            m = cv2.moments(largestContour)
+        #lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        if len(self.line) > 100:
+            #largestContour = max(lineContours,key=cv2.contourArea)
+            m = cv2.moments(self.line)
             if m['m00'] > 0:
                 xPos = int(m['m10']/m['m00'])
                 yPos = int(m['m01']/m['m00'])
