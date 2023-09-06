@@ -16,7 +16,6 @@ class PiVideoStream:
 		self.camera.shutter_speed = 7000
 		self.camera.exposure_mode = 'off'
 		
-
 		# set optional camera parameters (refer to PiCamera docs)
 		for (arg, value) in kwargs.items():
 			setattr(self.camera, arg, value)
