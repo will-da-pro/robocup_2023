@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from time import sleep
+from piCam import PiVideoStream
 #from motorDriver import Motors
 import warnings
 import math
@@ -8,12 +9,13 @@ import math
 
 class LineFollower:
     def __init__(self):
-        pass
+        global stream
+        stream = PiVideoStream.start()
     
-    def follow(self, cap: cv2.VideoCapture) -> None:
+    def follow(self) -> None:
         frameWidth = 1358
         
-        ret, self.frame = cap.read()
+        _, self.frame = stream.read()
         cv2.resize(self.frame,(679,453))
         error = 0
 
