@@ -1,12 +1,13 @@
-#from Follower import LineFollower
+#!/usr/bin/python3
+
 from Follower import LineFollower
-#from motorDriver import Motors
+from motorDriver import Motors
 from PidCalc import PID
 import cv2
 
 lastError = 0
 pastErrors = 0
-#motorsInit = Motors()
+motorsInit = Motors()
 cap = cv2.VideoCapture(0)
 while True:
     #error calc
@@ -15,11 +16,10 @@ while True:
     cv2.imshow("frame", follower.frame)
     cv2.imshow("mask", follower.line)
     #pid calc
-    #pid = PID(angle,3,0,0,lastError,pastErrors)
-    #turnRate = pid.calcTurnRate() 
-    #print(turnRate)
+    pid = PID(angle,3,0,0,lastError,pastErrors)
+    turnRate = pid.calcTurnRate() 
     #motor output
-    #motorsInit.drive(75,turnRate)
+    motorsInit.drive(75,turnRate)
 
     #water tower
     #rescue
