@@ -12,7 +12,7 @@ class LineFollower:
         global stream
         stream = PiVideoStream.start()
     
-    def follow(self) -> None:
+    def follow(self):
         frameWidth = 1358
         
         _, self.frame = stream.read()
