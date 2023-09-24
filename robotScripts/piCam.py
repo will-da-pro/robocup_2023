@@ -10,7 +10,7 @@ class PiVideoStream:
 		self.camera.resolution = resolution #480x240
 		self.camera.framerate = framerate
 		self.camera.sensor_mode = 6
-		self.camera.shutter_speed = 7000
+		self.camera.shutter_speed = 10000
 		self.camera.exposure_mode = 'off'
 		
 		# set optional camera parameters (refer to PiCamera docs)

@@ -8,11 +8,10 @@ import cv2
 lastError = 0
 pastErrors = 0
 motorsInit = Motors()
-cap = cv2.VideoCapture(0)
 while True:
     #error calc
     follower = LineFollower()
-    angle = follower.follow(cap)
+    angle = follower.follow()
     cv2.imshow("frame", follower.frame)
     cv2.imshow("mask", follower.line)
     #pid calc
@@ -25,5 +24,4 @@ while True:
     #rescue
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
-cap.release()
 cv2.destroyAllWindows()

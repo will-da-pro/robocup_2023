@@ -10,16 +10,16 @@ import math
 class LineFollower:
     def __init__(self):
         global stream
-        stream = PiVideoStream.start()
+        stream = PiVideoStream()
+        stream.start()
     
-    def follow(self):
-        frameWidth = 1358
+    def follow(self) -> None:
+        frameWidth = 240
         
-        _, self.frame = stream.read()
-        cv2.resize(self.frame,(679,453))
-        error = 0
+        self.frame = stream.read()
+        #cv2.resize(self.frame,(679,453))
 
-        roi = self.frame[500:600,0:frameWidth]
+        roi = self.frame[100:200,0:frameWidth]
         
         self.line = cv2.inRange(self.frame,(0,0,0),(20,20,20))
         self.line = cv2.erode(self.line,None,iterations=2)
