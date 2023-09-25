@@ -24,9 +24,10 @@ class LineFollower:
         #roi = self.frame[100:200,0:frameWidth] not being used rn
         
         self.line = cv2.inRange(self.frame,(0,0,0),(20,20,20))
-        self.line = cv2.erode(self.line,None,iterations=2)
-        self.line = cv2.dilate(self.line,None,iterations=2)
-        #CHANGE NONE
+        self.line = cv2.GaussianBlur(self.line,(5,5),0)
+        kernel = np.ones((3,3), np.uint8)
+        self.line = cv2.erode(self.line, kernel, iterations=3)
+        #self.line = cv2.dilate(self.line,kernel,iterations=2) idk reilly doesnt have it
     
         #lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         if len(self.line) > 100:
