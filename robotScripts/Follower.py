@@ -55,4 +55,4 @@ class LineFollower:
 if __name__ == '__main__':
     follower = LineFollower()
     cap = cv2.VideoCapture(0)
-    follower.follow(cap)
+    follower.follow()
