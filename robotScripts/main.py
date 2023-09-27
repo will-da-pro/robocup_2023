@@ -17,10 +17,10 @@ while True:
     cv2.imshow("frame", follower.frame)
     cv2.imshow("mask", follower.line)
     #pid calc
-    pid = PID(angle,3,0,0,lastError,pastErrors)
+    pid = PID(angle,1.2,0,0,lastError,pastErrors)
     turnRate = pid.calcTurnRate() 
     #motor output
-    motorsInit.drive(75,turnRate)
+    motorsInit.drive(100,turnRate)
 
     #water tower
     #rescue

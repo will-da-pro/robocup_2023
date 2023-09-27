@@ -3,10 +3,10 @@ from time import sleep
 
 class Motors:
     def __init__(self):
-        self.in1 = 25 #GPIO pin number
+        self.in1 = 18 #GPIO pin number
         self.in2 = 24
         self.in3 = 23
-        self.in4 = 18
+        self.in4 = 25
 
         self.en1 = 12 #the enable pin left
         self.en2 = 16 #the enable pin right
@@ -35,13 +35,16 @@ class Motors:
 
         if turnAngle >= 0:
             speedL = 100
-        else:
-            speedL = (2*turnAngle)+100
-
-        if turnAngle <= 0:
             speedR = (-2*turnAngle)+100
         else:
+            speedL = (2*turnAngle)+100
             speedR = 100
+            
+        #speedR = -100
+        #speedL = 100
+            
+        #speedR = speedR*-1
+        #speedL = speedL*-1
 
         if speedL > 100:
             speedL = 100

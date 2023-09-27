@@ -25,10 +25,10 @@ class LineFollower:
 
         #roi = self.frame[100:200,0:frameWidth] not being used rn
         
-        self.line = cv2.inRange(self.frame,(0,0,0),(20,20,20))
+        self.line = cv2.inRange(self.frame,(0,0,0),(45,45,45))
         self.line = cv2.GaussianBlur(self.line,(5,5),0)
         kernel = np.ones((3,3), np.uint8)
-        self.line = cv2.erode(self.line, kernel, iterations=3)
+        #self.line = cv2.erode(self.line, kernel, iterations=3)
         #self.line = cv2.dilate(self.line,kernel,iterations=2) idk reilly doesnt have it
     
         #lineContours,_ = cv2.findContours(self.line, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -39,10 +39,10 @@ class LineFollower:
                 xPos = int(m['m10']/m['m00'])
                 yPos = int(m['m01']/m['m00'])
                 cv2.circle(self.frame,(xPos,yPos),5,(255,0,0),-1)
-                cv2.circle(self.frame,(halfFrameWidth,halfFrameWidth),5,(0,255,0),-1)
-                cv2.line(self.frame,(halfFrameWidth,halfFrameWidth),(xPos,yPos),(0,255,0),2)
+                cv2.circle(self.frame,(halfFrameWidth,300),5,(0,255,0),-1)
+                cv2.line(self.frame,(halfFrameWidth,300),(xPos,yPos),(0,255,0),2)
                 opposite = halfFrameWidth-xPos
-                adjacent = frameHeight-yPos
+                adjacent = 300-yPos #change 300 for faster turning, less smooth
                 angleRad = math.atan2(opposite,adjacent)
                 angle = angleRad*(180/3.14159)
                 print("angle = ",angle)
