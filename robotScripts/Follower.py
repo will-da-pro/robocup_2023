@@ -20,6 +20,8 @@ class LineFollower:
         halfFrameHeight = 120
         
         self.frame = stream.read()
+        
+        self.frame = cv2.flip(self.frame, 0)
 
         #roi = self.frame[100:200,0:frameWidth] not being used rn
         
