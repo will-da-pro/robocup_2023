@@ -35,9 +35,12 @@ class Motors:
 
         if turnAngle >= 0:
             speedL = 100
-            speedR = (-2*turnAngle)+100
         else:
             speedL = (2*turnAngle)+100
+
+        if turnAngle <= 0:
+            speedR = (-2*turnAngle)+100
+        else:
             speedR = 100
 
         if speedL > 100:
