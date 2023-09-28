@@ -62,9 +62,18 @@ while True:
             #motors.stop()
 
     #rescue
-    #isSilver = follower.checkSilver()
-    #if isSilver == True:
-    #    pass
+    isSilver = follower.checkSilver()
+    if isSilver == True:
+        motors.drive(100,0)
+        time.sleep(3)
+        motors.stop() #move to middle
+
+        motors.drive(100,-100)
+        time.sleep(2)
+        motors.stop() #turn to starting pos
+
+        while checkDistance() > 300:
+            motors.drive(100,100)
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
