@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 
 lastError = 0
 pastErrors = 0
+distance = 0
 motors = Motors()
 follower = LineFollower()
 time.sleep(1) #NESSESARY WHY? IDK BUT IT WORKS maybe it needs to start up bruh idk, it took me too long to work this out
@@ -33,26 +34,37 @@ while True:
     motors.drive(100,turnRate)
 
     #water tower
-    if distance < 50:
+    if distance < 150:
         time.sleep(0.1)
-        if distance < 50: #double check, robot may be tripping
+        if distance < 100: #double check, robot may be tripping
             motors.stop()
             time.sleep(1)
-            motors.drive(20,100) #rotate on the spot
-            time.sleep(1)
+            
+            #motors.backward(1,50)#backward
+            #time.sleep(1)
+            #motors.stop()
+            #time.sleep(5)
+            
+            motors.drive(5,100) #rotate on the spot
+            time.sleep(0.5)
             motors.stop()
-
-            while follower.lineInFrame() == False:
-                motors.drive(50,-20) #around tower
+            time.sleep(2)
+            
+            motors.drive(100,-38)
+            time.sleep(3.5)
+            #while follower.lineInFrame() == False:
+            #    motors.drive(50,-20) #around tower
             motors.stop()
-            motors.drive(20,100)
-            time.sleep(1)
-            motors.stop()
+            time.sleep(5)
+            
+            #motors.drive(20,100)
+            #time.sleep(0.1)
+            #motors.stop()
 
     #rescue
-    isSilver = follower.checkSilver()
-    if isSilver == True:
-        pass
+    #isSilver = follower.checkSilver()
+    #if isSilver == True:
+    #    pass
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
