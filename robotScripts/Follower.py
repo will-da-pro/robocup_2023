@@ -52,7 +52,27 @@ class LineFollower:
         else:
             angle = 0
 
-        return angle 
+        return angle
+
+    def checkSilver(self):
+        blur = cv2.GaussianBlur(self.line,(5,5),0) #tune amount
+        silver = cv2.inRange(blur,(90,90,90),(255,255,255)) #obv need tuning
+
+        if len(silver) > 100: #tune
+            isSilver = True
+        else:
+            isSilver = False
+
+        return isSilver
+    
+    def lineInFrame(self):
+        if len(self.line) > 100: #tune
+            lineInFrame = True
+        else:
+            lineInFrame = False
+
+        return lineInFrame
+
 
 if __name__ == '__main__':
     follower = LineFollower()

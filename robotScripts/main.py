@@ -34,8 +34,25 @@ while True:
 
     #water tower
     if distance < 50:
-        motors.drive(50,-20)
+        time.sleep(0.1)
+        if distance < 50: #double check, robot may be tripping
+            motors.stop()
+            time.sleep(1)
+            motors.drive(20,100) #rotate on the spot
+            time.sleep(1)
+            motors.stop()
 
+            while follower.lineInFrame() == False:
+                motors.drive(50,-20) #around tower
+            motors.stop()
+            motors.drive(20,100)
+            time.sleep(1)
+            motors.stop()
+
+    #rescue
+    isSilver = follower.checkSilver()
+    if isSilver == True:
+        pass
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
