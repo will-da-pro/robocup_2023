@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 
 lastError = 0
 pastErrors = 0
-motorsInit = Motors()
+motors = Motors()
 follower = LineFollower()
 time.sleep(1) #NESSESARY WHY? IDK BUT IT WORKS maybe it needs to start up bruh idk, it took me too long to work this out
 while True:
@@ -30,10 +30,11 @@ while True:
     pid = PID(angle,1.2,0,0,lastError,pastErrors)
     turnRate = pid.calcTurnRate() 
     #motor output
-    motorsInit.drive(100,turnRate)
+    motors.drive(100,turnRate)
 
     #water tower
-    #rescue
+    if distance < 50:
+        motors.drive(50,-20)
 
 
     if cv2.waitKey(1) & 0xff == ord("s"):
