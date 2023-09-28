@@ -1,6 +1,5 @@
-import cv2
-import numpy as np
-import gpiozero
+from motorDriver import Motors
+from checkDistTOF import checkDistance
 
 def rescue():
     # Go forwards
@@ -15,5 +14,5 @@ def rescue():
     # Rotate until facing block
     # Move forwards to block
     # Lift can up
-    #
+    
     pass
