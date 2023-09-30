@@ -27,16 +27,25 @@ while True:
     angle = follower.follow()
     cv2.imshow("frame", follower.frame)
     cv2.imshow("mask", follower.line)
+    #cv2.imshow("grey", follower.grey)
     #pid calc
-    pid = PID(angle,1.2,0,0,lastError,pastErrors)
+    pid = PID(angle,2.1,0,0,lastError,pastErrors)
     turnRate = pid.calcTurnRate() 
     #motor output
     motors.drive(100,turnRate)
 
     #water tower
-    if distance < 150:
+    if distance < 100:
         time.sleep(0.1)
+        lastDistance = distance
+        distance = checkDistance()
+        if distance is not None:
+            print(f"Distance: {distance} mm")
+        else:
+            print("Error, retrying tho")
+            distance = lastDistance
         if distance < 100: #double check, robot may be tripping
+            print(f"water tower @ {distance}")
             motors.stop()
             time.sleep(1)
             
@@ -64,18 +73,67 @@ while True:
     #rescue
     isSilver = follower.checkSilver()
     if isSilver == True:
-        motors.drive(100,0)
-        time.sleep(3)
-        motors.stop() #move to middle
-
-        motors.drive(100,-100)
+        motors.stop()
         time.sleep(2)
-        motors.stop() #turn to starting pos
-
-        while checkDistance() > 300:
+        isSilver = follower.checkSilver()
+        if isSilver == True: 
+            print(f"THERES RESCUE TILE with {isSilver} silver")
+            motors.drive(50,0)
+            time.sleep(2)
+            motors.stop() #move to middle
+            time.sleep(0)
+            
+            motors.drive(100,-100)
+            time.sleep(1)
+            motors.stop() #turn to starting pos
+            time.sleep(0.5)
+            
             motors.drive(100,100)
+            distance = 1000
+            while True:
+                lastDistance = None
+                while True:
+                    distance = checkDistance()
+                    if distance is not None:
+                        print(f"Distance: {distance}mm")
+                        if distance < 350: #if needed add a > 60ish
+                            # can detected
+                            secondDistance = checkDistance()
+                            if secondDistance is not None:
+                                print(f"Second Distance: {secondDistance}mm")
+                                if secondDistance < 350:
+                                    # First and second checks confirm object is within 200 mm
+                                    thirdDistance = checkDistance()
+                                    if thirdDistance is not None:
+                                        print(f"Third Distance: {thirdDistance}mm")
+                                        if thirdDistance > 350:
+                                            print("false positive continuing")
+                                            break  # restart inner while loop
+                                        else:
+                                            print("found actual can")
+                                            motors.stop()
+                                            #motors.drive(100,-100) #compensation
+                                            time.sleep(0.3)
+                                            distance = checkDistance()
+                                            print(distance)
+                                            time.sleep(5)
+                                            motors.drive(30,0)
+                                            time.sleep(5)
+                                            motors.stop()
+                                    else:
+                                        print("error from i2c")
+                                else:
+                                    print("false positive")
+                            else:
+                                print("error from i2c")
+                        else:
+                            print("no can found, still searching")
+                    else:
+                        print("error from i2c")
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
 cv2.destroyAllWindows()
 GPIO.cleanup()
+
+

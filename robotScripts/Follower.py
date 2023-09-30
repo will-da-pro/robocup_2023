@@ -12,6 +12,7 @@ class LineFollower:
         global stream
         stream = PiVideoStream()
         stream.start()
+        self.grey = None
     
     def follow(self) -> None:
         frameWidth = 480
@@ -28,6 +29,7 @@ class LineFollower:
         self.line = cv2.inRange(self.frame,(0,0,0),(45,45,45))
         self.line = cv2.GaussianBlur(self.line,(5,5),0)
         kernel = np.ones((3,3), np.uint8)
+        
         #self.line = cv2.erode(self.line, kernel, iterations=3)
         #self.line = cv2.dilate(self.line,kernel,iterations=2) idk reilly doesnt have it
     
@@ -39,10 +41,10 @@ class LineFollower:
                 xPos = int(m['m10']/m['m00'])
                 yPos = int(m['m01']/m['m00'])
                 cv2.circle(self.frame,(xPos,yPos),5,(255,0,0),-1)
-                cv2.circle(self.frame,(halfFrameWidth,300),5,(0,255,0),-1)
-                cv2.line(self.frame,(halfFrameWidth,300),(xPos,yPos),(0,255,0),2)
+                cv2.circle(self.frame,(halfFrameWidth,270),5,(0,255,0),-1)
+                cv2.line(self.frame,(halfFrameWidth,270),(xPos,yPos),(0,255,0),2)
                 opposite = halfFrameWidth-xPos
-                adjacent = 300-yPos #change 300 for faster turning, less smooth
+                adjacent = 270-yPos #change 300 for faster turning, less smooth
                 angleRad = math.atan2(opposite,adjacent)
                 angle = angleRad*(180/3.14159)
                 print("angle = ",angle)
@@ -55,18 +57,19 @@ class LineFollower:
         return angle
 
     def checkSilver(self):
-        blur = cv2.GaussianBlur(self.line,(5,5),0) #tune amount
-        silver = cv2.inRange(blur,(90,90,90),(255,255,255)) #obv need tuning
+        gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+        ret, silver = cv2.threshold(gray,254,255,cv2.THRESH_BINARY)
+        silver = cv2.countNonZero(silver)
+        print(silver)
 
-        if len(silver) > 100: #tune
+        if silver > 300: #tune
             isSilver = True
         else:
             isSilver = False
-
         return isSilver
     
     def lineInFrame(self):
-        if len(self.line) > 100: #tune
+        if len(self.line) > 10000: #tune
             lineInFrame = True
         else:
             lineInFrame = False
