@@ -88,43 +88,51 @@ while True:
             motors.stop() #turn to starting pos
             time.sleep(0.5)
             
-            motors.drive(100,100) #start spinning!
+            motors.drive(100,100)
             distance = 1000
             while True:
-                check_interval = 0.1
-
-                start_time = time.time() #start a stopwatch
-                distances = [] #gonna list distances then avg
-                while time.time() - start_time < check_interval: #while its been less than 0.1 sec
+                lastDistance = None
+                while True:
                     distance = checkDistance()
                     if distance is not None:
-                        distances.append(distance)
+                        print(f"Distance: {distance}mm")
+                        if distance < 350: #if needed add a > 60ish
+                            # can detected
+                            secondDistance = checkDistance()
+                            if secondDistance is not None:
+                                print(f"Second Distance: {secondDistance}mm")
+                                if secondDistance < 350:
+                                    # First and second checks confirm object is within 200 mm
+                                    thirdDistance = checkDistance()
+                                    if thirdDistance is not None:
+                                        print(f"Third Distance: {thirdDistance}mm")
+                                        if thirdDistance > 350:
+                                            print("false positive continuing")
+                                            break  # restart inner while loop
+                                        else:
+                                            print("found actual can")
+                                            motors.stop()
+                                            #motors.drive(100,-100) #compensation
+                                            time.sleep(0.3)
+                                            distance = checkDistance()
+                                            print(distance)
+                                            time.sleep(5)
+                                            motors.drive(30,0)
+                                            time.sleep(5)
+                                            motors.stop()
+                                    else:
+                                        print("error from i2c")
+                                else:
+                                    print("false positive")
+                            else:
+                                print("error from i2c")
+                        else:
+                            print("no can found, still searching")
                     else:
-                        print("sensor's having a moment")
-        
-                if distances:
-                    avg_distance = sum(distances) / len(distances)
-                    print(f"Avg Distance: {avg_distance} mm")
-                    if avg_distance < 200:
-                        print("found a can fr")
-                        motors.stop()
-                        #motors.drive(100,-100) #compensation
-                        time.sleep(0.3)
-                        time.sleep(5)
-                        motors.drive(30,0)
-                        time.sleep(5)
-                        motors.stop()
-                    else:
-                        print("no can found, still searching")
-                else:
-                    print("error from i2c")
-
-    print("can was a ghost")
-
+                        print("error from i2c")
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
 cv2.destroyAllWindows()
 GPIO.cleanup()
-
 
