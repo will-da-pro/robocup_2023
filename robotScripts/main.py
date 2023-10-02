@@ -88,26 +88,32 @@ while True:
             motors.stop() #turn to starting pos
             time.sleep(0.5)
             
-            motors.drive(100,100)
+            motors.drive(100,100) #start spinning!
             distance = 1000
             while True:
-                timeout_seconds = 30  # Adjust the overall search duration as needed
-                check_interval = 0.5  # Adjust the interval between distance checks as needed
-                start_time = time.time()
+                check_interval = 0.1
 
-                while time.time() - start_time < timeout_seconds:
-                    distances = []
-                    while time.time() - start_time < check_interval:
-                        distance = checkDistance()
-                        if distance is not None:
-                            distances.append(distance)
+                start_time = time.time() #start a stopwatch
+                distances = [] #gonna list distances then avg
+                while time.time() - start_time < check_interval: #while its been less than 0.1 sec
+                    distance = checkDistance()
+                    if distance is not None:
+                        distances.append(distance)
+                    else:
+                        print("sensor's having a moment")
         
                 if distances:
                     avg_distance = sum(distances) / len(distances)
                     print(f"Avg Distance: {avg_distance} mm")
                     if avg_distance < 200:
-                        print("Object detected within 200 mm, stopping.")
-                        MOVEHERE
+                        print("found a can fr")
+                        motors.stop()
+                        #motors.drive(100,-100) #compensation
+                        time.sleep(0.3)
+                        time.sleep(5)
+                        motors.drive(30,0)
+                        time.sleep(5)
+                        motors.stop()
                     else:
                         print("no can found, still searching")
                 else:
