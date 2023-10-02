@@ -91,45 +91,30 @@ while True:
             motors.drive(100,100)
             distance = 1000
             while True:
-                lastDistance = None
-                while True:
-                    distance = checkDistance()
-                    if distance is not None:
-                        print(f"Distance: {distance}mm")
-                        if distance < 350: #if needed add a > 60ish
-                            # can detected
-                            secondDistance = checkDistance()
-                            if secondDistance is not None:
-                                print(f"Second Distance: {secondDistance}mm")
-                                if secondDistance < 350:
-                                    # First and second checks confirm object is within 200 mm
-                                    thirdDistance = checkDistance()
-                                    if thirdDistance is not None:
-                                        print(f"Third Distance: {thirdDistance}mm")
-                                        if thirdDistance > 350:
-                                            print("false positive continuing")
-                                            break  # restart inner while loop
-                                        else:
-                                            print("found actual can")
-                                            motors.stop()
-                                            #motors.drive(100,-100) #compensation
-                                            time.sleep(0.3)
-                                            distance = checkDistance()
-                                            print(distance)
-                                            time.sleep(5)
-                                            motors.drive(30,0)
-                                            time.sleep(5)
-                                            motors.stop()
-                                    else:
-                                        print("error from i2c")
-                                else:
-                                    print("false positive")
-                            else:
-                                print("error from i2c")
-                        else:
-                            print("no can found, still searching")
+                timeout_seconds = 30  # Adjust the overall search duration as needed
+                check_interval = 0.5  # Adjust the interval between distance checks as needed
+                start_time = time.time()
+
+                while time.time() - start_time < timeout_seconds:
+                    distances = []
+                    while time.time() - start_time < check_interval:
+                        distance = checkDistance()
+                        if distance is not None:
+                            distances.append(distance)
+        
+                if distances:
+                    avg_distance = sum(distances) / len(distances)
+                    print(f"Avg Distance: {avg_distance} mm")
+                    if avg_distance < 200:
+                        print("Object detected within 200 mm, stopping.")
+                        MOVEHERE
                     else:
-                        print("error from i2c")
+                        print("no can found, still searching")
+                else:
+                    print("error from i2c")
+
+    print("can was a ghost")
+
 
     if cv2.waitKey(1) & 0xff == ord("s"):
         break
