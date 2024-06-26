@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 from time import sleep
-
+import math
 class Motors:
-    def __init__(self):
+    def __init__(self, width, radius):
         self.in1 = 18 #GPIO pin number
         self.in2 = 24
         self.in3 = 23
@@ -10,6 +10,10 @@ class Motors:
 
         self.en1 = 12 #the enable pin left
         self.en2 = 16 #the enable pin right
+        
+        self.width = width
+        self.radius = radius
+        self.circumference = math.pi * math.pow(radius, 2)
 
         GPIO.setmode(GPIO.BCM)   #sets pins to outputs
         GPIO.setup(self.in1,GPIO.OUT)

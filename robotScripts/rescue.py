@@ -2,6 +2,7 @@ from motorDriver import Motors
 from checkDistTOF import checkDistance
 
 def rescue():
+    Motors.forward(3, 100)
     # Go forwards
     # rotate left approx 120 degrees
     # Engage huskylens

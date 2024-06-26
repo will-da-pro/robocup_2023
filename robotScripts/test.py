@@ -1,13 +1,59 @@
+"""
+@file hough_lines.py
+@brief This program demonstrates line finding with the Hough transform
+"""
+import sys
 import math
-
-# Define the coordinates of the two circles
-circle1_x, circle1_y = 0, 0  # Replace with the coordinates of your first circle
-circle2_x, circle2_y = -5, 5  # Replace with the coordinates of your second circle
-
-# Calculate the angle relative to the vertical line
-angle_rad = math.atan2(circle2_x - circle1_x, circle2_y - circle1_y)
-
-# Convert the angle from radians to degrees and reverse its sign
-angle_deg = -math.degrees(angle_rad)
-
-print(f"The angle relative to the vertical line is {angle_deg} degrees.")
+import cv2 as cv
+import numpy as np
+import random
+def main(argv):
+    default_file = '/Users/williamdolier/Library/Mobile Documents/com~apple~CloudDocs/Desktop/projects/python/robocup_2023/robotScripts/tiles/JPEG/11. Gridlock.jpg'
+    filename = argv[0] if len(argv) > 0 else default_file
+    # Loads an image
+    src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
+    # Check if image is loaded fine
+    if src is None:
+        print ('Error opening image!')
+        print ('Usage: hough_lines.py [image_name -- default ' + default_file + '] \n')
+        return -1
+ 
+    dst = cv.Canny(src, 50, 200, None, 3)
+ 
+    # Copy edges to the images that will display the results in BGR
+    cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
+    cdstP = np.copy(cdst)
+ 
+    lines = cv.HoughLines(dst, 1, np.pi / 180, 150, None, 0, 0)
+ 
+    if lines is not None:
+        for i in range(0, len(lines)):
+            rho = lines[i][0][0]
+            theta = lines[i][0][1]
+            a = math.cos(theta)
+            b = math.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+            pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+            cv.line(cdst, pt1, pt2, (0,0,255), 3, cv.LINE_AA)
+ 
+ 
+    linesP = cv.HoughLinesP(dst, 1, np.pi / 180, 50, None, 50, 10)
+    print(linesP)
+    
+    if linesP is not None:
+        for i in range(0, len(linesP)):
+            l = linesP[i][0]
+            cv.line(cdstP, (l[0], l[1]), (l[2], l[3]), (random.randint(50,255),random.randint(50,255),random.randint(50,255)), 3, cv.LINE_AA)
+ 
+    cv.imshow("Source", src)
+    cv.imshow("Detected Lines (in red) - Standard Hough Line Transform", cdst)
+    cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", cdstP)
+    cv.imshow("Canny image", dst)
+ 
+    cv.waitKey()
+    return 0
+ 
+if __name__ == "__main__":
+    main(sys.argv[1:])
