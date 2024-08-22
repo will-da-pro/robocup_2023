@@ -109,10 +109,8 @@ while True:
     targetAngle = 90
     
     if lineCount == 0:
-        print(0)
-        targetAngle = 90 
+        targetAngle = 90
     elif lineCount == 1:
-        print(1)
         targetAngle = lineCentreArray[0]
     else:
         if greenVal == None:
