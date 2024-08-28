@@ -83,3 +83,7 @@ class driveBase():
             pass
 
         self.stop()
+        
+    def turn(self, degrees):
+        #TODO code turning logic
+        pass

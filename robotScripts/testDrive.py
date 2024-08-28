@@ -91,19 +91,44 @@ while True:
     #green square
     landon2 = 0
     n = imgThirdSize
-    greenVal = 0
-    greenPos = 900
+    greenY = 900
+    startGreen = 0
+    alreadyGreen = False
+    greenPos = []
+    greenCentreArray = []
+    
+    
+    
+    
     while n < (imgThirdSize * 2):
-        if img[greenPos][n][1] >= img[greenPos][n][0] + 20 and img[greenPos][n][1] >= img[greenPos][n][2] + 20:
-            greenVal += n
-            landon2 += 1
+        green = frame[greenY][n][1] >= frame[greenY][n][0] + 20 and frame[greenY][n][1] >= frame[greenY][n][2] + 20
+        
+        if green:
+            if not alreadyGreen:
+                startGreen = n
+                alreadyGreen = True
+            elif n == imgThirdSize * 2 - 1:
+                greenPos.append([startGreen, n])
+                alreadyGreen = False
+            img = cv2.circle(img, (n, greenY), 0, (0,255,0), 5)
+        else:
+            if alreadyGreen:
+                greenPos.append([startGreen, n])
+                alreadyGreen = False
+            img = cv2.circle(img, (n, greenY), 0, (255,0,0), 5)
+            
         n += 1
-    if landon2 > 0:
-        greenVal /= landon2
-        greenVal = int(greenVal)
-    else:
-        greenVal = None
-        n += 1
+        
+    for i in greenPos:
+        centre = math.floor(np.average(i))
+        
+        img = cv2.circle(img, (centre, greenY), 0, (0,0,255), 20)
+        
+        greenCentreArray.append(centre)
+        
+        
+        
+        
         
     lineCount = len(lineCentreArray)
     targetAngle = 90
@@ -113,16 +138,30 @@ while True:
     elif lineCount == 1:
         targetAngle = lineCentreArray[0]
     else:
-        if greenVal == None:
+        if len(greenCentreArray) == 0:
             closestVal = lineCentreArray[0] - 90
             for i in lineCentreArray:
                 if abs(closestVal) - abs(i - 90) > 0:
                     closestVal = i - 90
             targetAngle = closestVal + 90
-        elif greenVal < len(frame[0]) / 2:
-            targetAngle = lineCentreArray[0]
+        elif len(greenCentreArray) == 1:
+            print(greenCentreArray[0], imgThirdSize * 1.5)
+            if greenCentreArray[0] < imgThirdSize * 1.5: 
+                print("left")
+                targetAngle = lineCentreArray[0]
+            else:
+                print("right")
+                targetAngle = lineCentreArray[len(lineCentreArray) - 1]
+                print(targetAngle)
+        elif len(greenCentreArray) == 2:
+            #robot.turn(180)
+            targetAngle = 90
         else:
-            targetAngle = lineCentreArray[len(lineCentreArray) - 1]
+            closestVal = lineCentreArray[0] - 90
+            for i in lineCentreArray:
+                if abs(closestVal) - abs(i - 90) > 0:
+                    closestVal = i - 90
+            targetAngle = closestVal + 90
             
     img = cv2.line(img, (originx, originy), (originx - int(r * math.cos(targetAngle * math.pi / 180)), originy - int(r * math.sin(targetAngle * math.pi / 180))), (255, 0, 255), 5)
 
@@ -130,9 +169,7 @@ while True:
     #robot.drive(60, turnVal)
 
     #cv2.drawContours(img, contours, -1, (0,0,255), 3)
-    img = cv2.line(img, (0, greenPos), (len(thresh[0]), greenPos), (0, 0, 255), 3)
-    if greenVal != None:
-        img = cv2.circle(img, (greenVal, greenPos), 10, (255, 0, 0), 5)
+    #img = cv2.line(img, (0, greenY), (len(thresh[0]), greenY), (0, 0, 255), 3)
   
     cv2.imshow("frame", img)
     if chr(cv2.waitKey(1)&255) == 'q':
