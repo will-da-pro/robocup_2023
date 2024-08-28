@@ -165,7 +165,7 @@ while True:
             
     img = cv2.line(img, (originx, originy), (originx - int(r * math.cos(targetAngle * math.pi / 180)), originy - int(r * math.sin(targetAngle * math.pi / 180))), (255, 0, 255), 5)
 
-    turnVal = (targetAngle - 90) / 90
+    turnVal = (targetAngle - 90) * 10/9
     #robot.drive(60, turnVal)
 
     #cv2.drawContours(img, contours, -1, (0,0,255), 3)
